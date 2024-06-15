@@ -1,0 +1,16 @@
+class Solution {
+    public boolean isPalindrome(int x) {
+        if(x < 0){
+            return false;
+        }
+        long ans = 0;
+        long rem = x;
+        while(rem!=0){
+            int digit = (int) rem%10;
+            ans = ans *10 + digit;
+            rem = rem/10;
+        }
+        return (ans == x);
+        }
+        
+}
