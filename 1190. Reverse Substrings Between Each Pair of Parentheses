@@ -1,0 +1,20 @@
+class Solution {
+    public String reverseParentheses(String s) {
+
+        StringBuilder resutlS = new StringBuilder(s);
+        int strtidx = resutlS.lastIndexOf("(");
+        int endIdx = resutlS.indexOf(")",strtidx);
+
+        while(strtidx != -1){
+            StringBuilder sb = new StringBuilder(resutlS.substring(strtidx +1,endIdx));
+            sb.reverse();
+            resutlS.replace(strtidx, endIdx+1,sb.toString());
+            strtidx = resutlS.lastIndexOf("(");
+            endIdx = resutlS.indexOf(")",strtidx);
+
+        }
+       return resutlS.toString();
+
+        
+    }
+}
