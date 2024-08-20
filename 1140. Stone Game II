@@ -1,0 +1,28 @@
+class Solution {
+    public int stoneGameII(int[] piles) {
+        int n = piles.length;
+
+        int[] safix = new int[n];
+        safix[n - 1] = piles[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            safix[i] = safix[i + 1] + piles[i];
+        }
+        int[][] dp = new int[n][n + 1];
+
+        return helper(safix, 1, 0, dp);
+    }
+
+    private int helper(int[] safix, int m, int i, int[][] dp) {
+        if (i == safix.length)
+            return 0;
+        if (i + (m * 2) >= safix.length)
+            return safix[i];
+        if (dp[i][m] != 0)
+            return dp[i][m];
+        int oponent = Integer.MAX_VALUE;
+        for (int x = 1; x <= (m * 2); x++) {
+            oponent = Math.min(oponent, helper(safix, Math.max(x, m), i + x, dp));
+        }
+        return dp[i][m] = safix[i] - oponent;
+    }
+}
