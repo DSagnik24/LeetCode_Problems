@@ -1,0 +1,22 @@
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int L=0,R=0;
+        int min = Integer.MAX_VALUE,sum = 0;
+        int n = nums.length;
+
+        while(R< n){
+            //add element of the right pointer
+            sum +=nums[R];
+
+            //contract window
+            while(target <= sum){
+                min = Math.min(min,R-L+1);
+                sum = sum - nums[L];
+                L++;
+            }
+            R++;
+        }
+        return min == Integer.MAX_VALUE ? 0:min;
+
+    }
+}
