@@ -1,0 +1,32 @@
+class Solution {
+    public int findMinDifference(List<String> timePoints) {
+        boolean[] times=new boolean[24*60];
+        int start = Integer.MAX_VALUE;
+        int end =Integer.MIN_VALUE;
+
+        for(String time: timePoints){
+            int minutes =Integer.parseInt(time.substring(3,5));
+            int hours = Integer.parseInt(time.substring(0,2));
+            int totalMins = hours*60 + minutes;
+
+            if(times[totalMins]){
+                return 0;
+            }
+            times[totalMins] =true;
+            start = Math.min(start,totalMins);
+            end = Math.max(end,totalMins);
+        }
+
+        int minDif = 24*60 -end+start;
+        int prev = start;
+        
+        for(int i=start + 1;i<=end;i++){
+            if(times[i]){
+                minDif = Math.min(minDif,i-prev);
+                prev = i;
+            }
+        }
+
+        return minDif;
+    }
+}
