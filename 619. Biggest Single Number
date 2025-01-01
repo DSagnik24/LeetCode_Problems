@@ -1,0 +1,10 @@
+WITH cte AS (
+    SELECT num, COUNT(num) AS occurence
+    FROM MyNumbers
+    GROUP BY num
+)
+SELECT max(num) as num
+FROM cte
+WHERE occurence = 1 or occurence is null
+ORDER BY num DESC
+LIMIT 1;
