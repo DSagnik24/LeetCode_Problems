@@ -1,0 +1,12 @@
+# Write your MySQL query statement below
+WITH t1 AS (
+    SELECT DISTINCT visited_on AS report_date
+    FROM Customer AS c
+    WHERE DATE_SUB(visited_on, INTERVAL 6 DAY) IN (SELECT visited_on FROM Customer)
+)
+SELECT t1.report_date as visited_on, round(sum(amount),2) as amount, round(sum(amount)/7,2) as average_amount
+FROM Customer AS c
+CROSS JOIN t1
+WHERE c.visited_on BETWEEN DATE_SUB(t1.report_date, INTERVAL 6 DAY) AND t1.report_date
+group by t1.report_date
+order by visited_on
