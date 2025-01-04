@@ -1,0 +1,16 @@
+# Write your MySQL query statement below
+SELECT DEPT_NAME AS Department, EMP_NAME AS Employee, salary AS Salary
+FROM(
+SELECT 
+  DENSE_RANK() OVER(PARTITION BY E.departmentId ORDER BY E.salary DESC) AS RANK_SAL,
+  E.id AS EMP_ID, 
+  E.name AS EMP_NAME, 
+  E.salary, 
+  E.departmentId, 
+  D.id AS DEPT_ID,
+  D.name AS DEPT_NAME
+FROM Employee E
+JOIN Department D
+  ON D.id = E.departmentId) AS TBL
+WHERE RANK_SAL<=3
+ORDER BY EMP_NAME;
