@@ -1,0 +1,18 @@
+class Solution {
+    public String compressedString(String word) {
+        StringBuilder ans=new StringBuilder();
+        char[] arr=word.toCharArray();
+        int i=0,n=arr.length;
+        while(i<n){
+            int c=0;
+            char prev=arr[i];
+            while(i<n && arr[i]==prev && c<9){
+                i++;
+                c++;
+            }
+            ans.append(c);
+            ans.append(prev);
+        }
+        return ans.toString();
+    }
+}
