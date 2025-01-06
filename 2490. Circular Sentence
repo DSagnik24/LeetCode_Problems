@@ -1,0 +1,17 @@
+class Solution {
+    public boolean isCircularSentence(String sentence) {
+        char[] ch = sentence.toCharArray();
+		int size = ch.length;
+		
+		if(size == 1) return true;
+		
+		if(ch[0] != ch[size-1]) return false;
+		
+		for(int i = 0; i < size; i++) {
+			if((ch[i]+"").isBlank()) {
+				if(ch[i-1] != ch[i+1]) return false;
+			}
+		}
+		return true;
+    }
+}
