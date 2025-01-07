@@ -1,0 +1,33 @@
+class Solution {
+    public boolean canSortArray(int[] nums) {
+        int prev_min_val = Integer.MAX_VALUE;
+        int prev_max_val = Integer.MIN_VALUE;
+        int cur_min_val = nums[0];
+        int cur_max_val = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (getSetBits(nums[i]) == getSetBits(nums[i-1])) {
+                cur_max_val = Math.max(nums[i], cur_max_val);
+                cur_min_val = Math.min(nums[i], cur_min_val);
+            } else {
+                
+                if (cur_min_val < prev_max_val) {
+                    return false;
+                }
+                prev_min_val = cur_min_val;
+                prev_max_val = cur_max_val;
+                cur_min_val = nums[i];
+                cur_max_val = nums[i];
+            }
+        }
+        return cur_min_val >= prev_max_val;
+    }
+
+    public int getSetBits(int num) {
+        int result = num & 1;
+        while(num > 0) {
+            num = num >> 1;
+            result += num & 1;
+        }
+        return result;
+    }
+}
