@@ -1,0 +1,29 @@
+class Solution {
+    private int b_s(int[][] items, int price){
+        int start = 0;
+        int end = items.length-1;
+        while(start<=end){
+            int mid = start + (end-start)/2;
+            if(items[mid][0]<=price)
+               start = mid+1;
+            else
+               end = mid-1;   
+        }
+        return end;
+    } 
+
+    public int[] maximumBeauty(int[][] items, int[] queries) {
+        Arrays.sort(items,(a,b)->Integer.compare(a[0],b[0]));
+        int[] most_beauty = new int[items.length];
+        most_beauty[0] = items[0][1];
+        for(int i=1; i<items.length; i++)
+            most_beauty[i] = Math.max(most_beauty[i-1], items[i][1]);
+        int[] ans = new int[queries.length];
+        for(int i=0; i<queries.length; i++){
+            int idx = this.b_s(items, queries[i]);
+            ans[i] = (idx==-1)? 0: most_beauty[idx];
+        }
+        return ans;
+        
+    }
+}
