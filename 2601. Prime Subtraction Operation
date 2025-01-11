@@ -1,0 +1,33 @@
+class Solution {
+    private int[] primesUntil(int n) {
+        if (n < 2) return new int[]{};
+        var primes = new int[200];
+        var composite = new boolean[n + 1];
+        primes[0] = 2;
+        var added = 1;
+        for (int i = 3; i <= n; i += 2) {
+            if (composite[i]) continue;
+            primes[added++] = i;
+            for (int j = i * i; j <= n; j += i) {
+                composite[j] = true;
+            }
+        }
+        return Arrays.copyOf(primes, added);
+    }
+
+    public boolean primeSubOperation(int[] nums) {
+        int max = 0;
+        for (int n: nums) {
+            max = Math.max(max, n);
+        }
+        var primes = primesUntil(max);
+
+        int prev = 0;
+        for (var n : nums) {
+            var pos = Arrays.binarySearch(primes, n - prev - 1);
+            if (pos == -1 && n <= prev) return false;
+            prev = n - (pos == -1 ? 0 : (pos < 0 ? primes[-pos - 2] : primes[pos]));
+        }
+        return true;
+    }
+}
