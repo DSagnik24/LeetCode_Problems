@@ -1,0 +1,21 @@
+class Solution {
+    public long countFairPairs(int[] nums, int lower, int upper) {
+        Arrays.sort(nums);
+        return task(nums,upper) - task(nums,lower-1);
+    }
+    public long task(int nums[], int val)
+    {
+        long p=0;
+        for(int i=0,j=nums.length-1;i<j;i++)
+        {
+            int k=nums[i]+nums[j];
+            while(i<j && k>val)
+            {
+                j--;
+                k=nums[i]+nums[j];
+            }
+            p+=(long)(j-i);
+        }
+        return p;
+    }
+}
