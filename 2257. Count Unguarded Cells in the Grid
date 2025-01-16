@@ -1,0 +1,43 @@
+class Solution {
+    public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
+        int res = m * n - walls.length - guards.length;
+        int[][] grid = new int[m][n];
+        for (int[] wall : walls)
+            grid[wall[0]][wall[1]] = 1;
+        for (int[] guard : guards)
+            grid[guard[0]][guard[1]] = 2;
+        // Process each guard
+        for (int[] guard : guards) {
+            int r = guard[0], c = guard[1];
+            // Up
+            for (int i = r - 1; i >= 0 && grid[i][c] <= 0; i--) {
+                if (grid[i][c] == 0) {
+                    res--;
+                    grid[i][c] = -1;
+                }
+            }
+            // Down
+            for (int i = r + 1; i < m && grid[i][c] <= 0; i++) {
+                if (grid[i][c] == 0) {
+                    res--;
+                    grid[i][c] = -1;
+                }
+            }
+            // Left
+            for (int i = c - 1; i >= 0 && grid[r][i] <= 0; i--) {
+                if (grid[r][i] == 0) {
+                    res--;
+                    grid[r][i] = -1;
+                }
+            }
+            // Right
+            for (int i = c + 1; i < n && grid[r][i] <= 0; i++) {
+                if (grid[r][i] == 0) {
+                    res--;
+                    grid[r][i] = -1;
+                }
+            }
+        }
+        return res;
+    }
+}
