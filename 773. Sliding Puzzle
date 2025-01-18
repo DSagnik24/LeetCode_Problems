@@ -1,0 +1,54 @@
+final class Solution {
+    private static final String SOLVED_BOARD_STRING = "123450";
+    private static final int[][] SWAP_OPTIONS = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4}, {1, 3, 5}, {2, 4}};
+    private Set<String> seenStates = new HashSet<>();
+    private Queue<String> states = new LinkedList<>();
+
+    public final int slidingPuzzle(final int[][] board) {
+        final String boardString = Solution.toString(board);
+        this.states.offer(boardString);
+        this.seenStates.add(boardString);
+        for (int nbSwaps = 0; !this.states.isEmpty(); ++nbSwaps)
+            if (this.isSolved())
+                return nbSwaps;
+        return -1;
+    }
+
+    private static final String toString(final int[][] board) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (final int[] row : board)
+            for (final int cell : row)
+                stringBuilder.append(cell);
+        return stringBuilder.toString();
+    }
+
+    private final boolean isSolved() {
+        int nbStates = this.states.size();
+        while (nbStates-- != 0) {
+            final String state = this.states.poll();
+            if (state.equals(Solution.SOLVED_BOARD_STRING))
+                return true;
+            this.pushNextStates(state);
+        }
+        return false;
+    }
+
+    private final void pushNextStates(final String state) {
+        final int iZero = state.indexOf('0');
+        for (final int swapOption : Solution.SWAP_OPTIONS[iZero]) {
+            final String nextState = this.swap(state, iZero, swapOption);
+            if (!this.seenStates.contains(nextState)) {
+                this.states.offer(nextState);
+                this.seenStates.add(nextState);
+            }
+        }
+    }
+
+    private final String swap(final String state, final int i, final int j) {
+        char[] chars = state.toCharArray();
+        final char temporary = chars[i];
+        chars[i] = chars[j];
+        chars[j] = temporary;
+        return new String(chars);
+    }
+}
