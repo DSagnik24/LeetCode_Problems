@@ -1,0 +1,43 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+class Solution {
+    public int minimumObstacles(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[]{0, 0, 0});
+        boolean[][] visited = new boolean[rows][cols];
+        
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int currentDistance = current[0];
+            int currentRow = current[1];
+            int currentCol = current[2];
+            
+            if (currentRow == rows - 1 && currentCol == cols - 1) {
+                return currentDistance;
+            }
+            
+            if (visited[currentRow][currentCol]) {
+                continue;
+            }
+            visited[currentRow][currentCol] = true;
+            
+            for (int[] direction : directions) {
+                int nextRow = currentRow + direction[0];
+                int nextCol = currentCol + direction[1];
+                if (nextRow >= 0 && nextRow < rows && nextCol >= 0 && nextCol < cols && !visited[nextRow][nextCol]) {
+                    if (grid[nextRow][nextCol] == 1) {
+                        queue.add(new int[]{currentDistance + 1, nextRow, nextCol});
+                    } else {
+                        queue.addFirst(new int[]{currentDistance, nextRow, nextCol});
+                    }
+                }
+            }
+        }
+        
+        return -1;
+    }
+}
