@@ -1,0 +1,26 @@
+class Solution {
+    public int waysToSplitArray(int[] nums) {
+        // Keep track of prefix and suffix sums
+        long prefixSum = 0, suffixSum = 0;
+
+        // Initially, the suffix sum includes all elements
+        for (int num : nums) {
+            suffixSum += num;
+        }
+
+        int validSplits = 0;
+        // Try each possible split position
+        for (int i = 0; i < nums.length - 1; i++) {
+            // Move current element from suffix to prefix
+            prefixSum += nums[i];
+            suffixSum -= nums[i];
+
+            // Check if this creates a valid split
+            if (prefixSum >= suffixSum) {
+                validSplits++;
+            }
+        }
+
+        return validSplits;
+    }
+}
