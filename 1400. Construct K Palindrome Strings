@@ -1,0 +1,16 @@
+class Solution {
+    public boolean canConstruct(String s, int k) {
+
+        if (k > s.length()) return false;
+        int[] letters = new int[26];
+        for(char c: s.toCharArray()) {
+            letters[c-'a'] ^= 1;
+        }
+        int unpaired_count = 0;
+        for(int i=0; i < letters.length; i++) {
+            unpaired_count += letters[i];
+        }
+        if (k<unpaired_count) return false;
+        return true;
+    }
+}
