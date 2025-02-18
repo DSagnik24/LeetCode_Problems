@@ -1,0 +1,28 @@
+class Solution {
+    public int maxArea(int[] height) {
+        int l = 0;                   
+        int r = height.length - 1;  
+        int maxWater = 0;               
+        
+        while (l < r) {
+            int width = r - l;
+            
+            // (the minimum height between the two lines)
+            int h = Math.min(height[l], height[r]);
+            
+            // water capacity of the current container
+            int water = width * h;
+            
+            // Update the maximum water capacity if the current container holds more water
+            maxWater = Math.max(maxWater, water);
+        
+            if (height[l] < height[r]) {
+                l++;
+            } else {
+                r--;
+            }
+        }
+        
+        return maxWater;
+    }
+}
