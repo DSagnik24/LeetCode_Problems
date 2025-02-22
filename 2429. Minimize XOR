@@ -1,0 +1,29 @@
+class Solution {
+    public int minimizeXor(int num1, int num2) {
+        // Count the number of set bits in num2
+        int set2 = 0; // Bits of num2
+        while (num2 > 0) {
+            set2 += (num2 & 1);
+            num2 >>= 1;
+        }
+        int result = 0;
+
+        // Use bits from num1 to construct result
+        for (int i = 31; i >= 0 && set2 > 0; i--) {
+            if ((num1 & (1 << i)) != 0) {
+                result |= (1 << i);
+                set2--;
+            }
+        }
+
+        // Fill remaining set bits in the lowest positions
+        for (int i = 0; i <= 31 && set2 > 0; i++) {
+            if ((result & (1 << i)) == 0) {
+                result |= (1 << i);
+                set2--;
+            }
+        }
+
+        return result;
+    }
+}
