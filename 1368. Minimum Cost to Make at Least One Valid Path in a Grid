@@ -1,0 +1,54 @@
+class Solution {
+    int N;
+    int M;
+    boolean[][] visited;
+    public int minCost(int[][] grid) {
+        N = grid.length;
+        M = grid[0].length;
+        visited = new boolean[N][M];
+        Queue<int[]> q = new LinkedList<>();
+        add(0, 0, grid, q);
+        int res = 0;
+        while ( ! q.isEmpty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                int[] c = q.poll();
+                if (c[0] == (N-1) && c[1] == (M-1) ) {
+                    return res;
+                }
+                add(c[0]+1, c[1], grid, q);
+                add(c[0]-1, c[1], grid, q);
+                add(c[0], c[1]+1, grid, q);
+                add(c[0], c[1]-1, grid, q);
+            }
+            res++;
+        }
+
+        return res;
+    }
+
+    public void add(int i, int j, int[][] grid, Queue<int[]> q) {
+        if (i < 0 || i == N || j < 0 || j == M || visited[i][j]) {
+            return;
+        }
+
+        visited[i][j] = true;
+
+        q.add(new int[]{i,j});
+
+        if (grid[i][j] == 1) {
+            add(i, j+1, grid, q);    
+        }
+        if (grid[i][j] == 2) {
+            add(i, j-1, grid, q);
+        }
+        
+        if (grid[i][j] == 3) {
+            add(i+1, j, grid, q);
+        }
+
+        if (grid[i][j] == 4) {
+            add(i-1, j, grid, q);
+        }
+    }
+}
