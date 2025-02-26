@@ -1,0 +1,88 @@
+class Node implements Comparable<Node>{
+    int x;
+    int y;
+    int height;
+    
+    @Override
+    public int compareTo(Node node) {
+        return this.height - node.height;
+    }
+    
+    public Node(int x, int y, int height) {
+        this.x = x;
+        this.y = y;
+        this.height = height;
+    }
+    
+}
+
+class Solution {
+    public int trapRainWater(int[][] heightMap) {
+        if(heightMap == null || heightMap.length == 0) return 0;
+        int rows = heightMap.length;
+        int cols = heightMap[0].length;
+        boolean visited[][] = new boolean[rows][cols];
+        return volumeOfRainWater(rows,cols,heightMap,visited);    
+        
+    }
+    
+    private int volumeOfRainWater(int row, int col, int[][] height, boolean[][] visited) {
+        //crete heap with outer cells as they will not hold water
+        PriorityQueue<Node> minHeap = new PriorityQueue<>();
+        
+        //add first and last column in heap - as they are in boundry incapable of holding water
+        for(int walker=0;walker < row; walker++) {
+            minHeap.add(new Node(walker,0,height[walker][0]));
+            minHeap.add(new Node(walker,col-1,height[walker][col-1]));
+            visited[walker][0] = true;
+            visited[walker][col-1] = true;
+        }
+        
+        //add first and last rows in heap = as they are incapable of holding water
+        for(int walker=0;walker<col;walker++) {
+            minHeap.add(new Node(0,walker,height[0][walker]));
+            minHeap.add(new Node(row - 1,walker,height[row-1][walker]));
+            visited[0][walker] = true;
+            visited[row-1][walker] = true;
+        }
+        
+        int[][] direction = new int[][]{{0,1}, {0,-1}, {1,0}, {-1,0}};
+        
+        //poll one element from heap(which will give you minimum) and check it's neighbour. Keep pooling untill it's empty
+        Node node = null;
+        int maxHeight = 0;
+        int waterVolume = 0;
+        while(!minHeap.isEmpty()) {
+            node = minHeap.poll();
+            int x = node.x;
+            int y = node.y;
+            int h = node.height;
+            if(h < maxHeight) {
+                waterVolume += maxHeight - h;
+            } else {
+                maxHeight = h;
+            }
+            for(int walker=0; walker<4; walker++) {
+                int nx = node.x - direction[walker][0];
+                int ny = node.y - direction[walker][1];
+                
+                if(nx < 0 || ny < 0 || nx >= row || ny >= col) continue;
+                
+                if(visited[nx][ny] == true) continue;
+                
+                int nh = height[nx][ny];
+                minHeap.add(new Node(nx,ny,nh));
+                visited[nx][ny] = true;
+                
+            }
+            
+        }
+        return waterVolume;
+        
+        
+    }
+    
+    private void heapify() {
+        
+    }
+}
