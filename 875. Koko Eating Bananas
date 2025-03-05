@@ -1,0 +1,24 @@
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int l =1;
+        int r = (int) 10e9;
+        while(l<=r){
+            int m = l+(r-l)/2;
+            if(canEatBananas(piles,m,h)){
+                r= m-1;
+            }else{
+                l= m+1;
+            }
+        }
+        return l;
+    }
+    private boolean canEatBananas(int[] piles,int m,int h){
+        double res = 0;
+
+        for(int p : piles){
+            res += Math.ceil((double)p / m); //Divide each element of the array
+                                             //by the value we chose
+        }
+        return res <= h;
+    }
+}
