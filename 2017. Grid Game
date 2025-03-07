@@ -1,0 +1,30 @@
+class Solution {
+    
+    public long gridGame(int[][] grid) {
+        int N = grid[0].length;
+
+        long[] prefixTop = new long[N];
+        long[] prefixBottom = new long[N];
+
+        prefixTop[0] = grid[0][0];
+        prefixBottom[0] = grid[1][0];
+        for (int i = 1; i < N; i++) {
+            prefixTop[i] = prefixTop[i - 1] + (long) grid[0][i];
+            prefixBottom[i] = prefixBottom[i - 1] + (long) grid[1][i];
+        }
+
+        long res = Long.MAX_VALUE; 
+
+        for (int i = 0; i < N; i++) {
+            long top = prefixTop[N - 1] - prefixTop[i];
+            long bottom = 0;
+            if (i > 0) {
+                bottom = prefixBottom[i - 1];
+            }
+            long secondRobot = Math.max(top, bottom);
+            res = Math.min(res, secondRobot);
+        }
+
+        return res;
+    }
+}
