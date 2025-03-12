@@ -1,0 +1,41 @@
+class Solution {
+
+    public int countServers(int[][] grid) {
+        int communicableServersCount = 0; // Final count of servers that can communicate
+        int[] rowCounts = new int[grid[0].length]; // To count servers in each column
+        int[] lastServerInCol = new int[grid.length]; // To track single servers in rows
+
+        // Initialize lastServerInCol to -1 (no server in row initially)
+        for (int i = 0; i < lastServerInCol.length; i++) {
+            lastServerInCol[i] = -1;
+        }
+
+        // First pass: Count servers in rows and columns
+        for (int row = 0; row < grid.length; row++) {
+            int serverCountInRow = 0; // To count servers in the current row
+            for (int col = 0; col < grid[0].length; col++) {
+                if (grid[row][col] == 1) { // Found a server
+                    serverCountInRow++;
+                    rowCounts[col]++; // Increment column server count
+                    lastServerInCol[row] = col; // Update the last server's column index
+                }
+            }
+
+            // If the row has more than one server, all servers in the row can communicate
+            if (serverCountInRow != 1) {
+                communicableServersCount += serverCountInRow;
+                lastServerInCol[row] = -1; // No single server to validate
+            }
+        }
+
+        // Second pass: Check isolated servers in rows
+        for (int row = 0; row < grid.length; row++) {
+            // If there is exactly one server in the row
+            if (lastServerInCol[row] != -1 && rowCounts[lastServerInCol[row]] > 1) {
+                communicableServersCount++; // Server can communicate via its column
+            }
+        }
+
+        return communicableServersCount; // Return the final count
+    }
+}
