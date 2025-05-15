@@ -1,0 +1,51 @@
+import java.util.Arrays;
+
+class Solution {
+    public int[] lexicographicallySmallestArray(int[] nums, int limit) {
+        int n = nums.length; // Length of the input array
+
+        // Helper class to pair values with their original indices
+        class Pair {
+            int index, value; // Pair contains the original index and value
+            Pair(int index, int value) {
+                this.index = index;
+                this.value = value;
+            }
+        }
+
+        Pair[] pairs = new Pair[n]; // Array to store the pairs
+        int[] ans = new int[n]; // Array to store the final result
+
+        // Step 1: Create Pair objects for each element in nums
+        for (int i = 0; i < n; i++) {
+            pairs[i] = new Pair(i, nums[i]);
+        }
+
+        // Step 2: Sort the pairs by their values
+        Arrays.sort(pairs, (a, b) -> a.value - b.value);
+
+        // Step 3: Iterate through sorted pairs to group connected components
+        Pair[] ids = Arrays.copyOf(pairs, n); // Copy pairs for index sorting
+        int i = 0; // Pointer to iterate through the array
+
+        while (i < n) {
+            int j = i; // Start of a connected component
+            i++; // Move to the next element
+
+            // Find the range of the current connected component
+            while (i < n && pairs[i].value - pairs[i - 1].value <= limit) {
+                i++;
+            }
+
+            // Step 4: Sort the connected component by their original indices
+            Arrays.sort(ids, j, i, (a, b) -> a.index - b.index);
+
+            // Step 5: Update the result array with the sorted component
+            for (int k = j; k < i; k++) {
+                ans[ids[k].index] = pairs[k].value;
+            }
+        }
+
+        return ans; // Return the lexicographically smallest array
+    }
+}
