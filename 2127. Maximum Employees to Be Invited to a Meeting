@@ -1,0 +1,103 @@
+class Solution {
+    public int maximumInvitations(int[] favorite) {
+        int n = favorite.length;
+        int[] indegree = new int[n];
+        for (int i = 0; i < n; i++) {
+            indegree[favorite[i]]++;
+        }
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int cur = queue.poll();
+                int next = favorite[cur];
+                indegree[next]--;
+                if (indegree[next] == 0) {
+                    queue.offer(next);
+                }
+            }
+        }
+        int maxCycleLength = 0;
+        boolean[] visited = new boolean[n];
+        List<Integer> cycleLengthTwo = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] != 0) {
+            
+                int length = 0;
+                int cur = i;
+                while (!visited[cur]) {
+                    visited[cur] = true;
+                    cur = favorite[cur];
+                    length++;
+                }
+                maxCycleLength = Math.max(maxCycleLength, length);
+               
+                if (length == 2) {
+                    cycleLengthTwo.add(i);
+                }
+            }
+        }
+
+        List<List<Integer>> reverseGraph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            reverseGraph.add(new ArrayList<>());
+        }
+        for (int i = 0; i < n; i++) {
+            reverseGraph.get(favorite[i]).add(i);
+        }
+
+        int totalCycleTwoLength = 0;
+        for (int i = 0; i < cycleLengthTwo.size(); i++) {
+            int curNode = cycleLengthTwo.get(i);
+            int theOtherNode = favorite[curNode];
+            totalCycleTwoLength += longestTail(curNode, reverseGraph, theOtherNode);
+            totalCycleTwoLength += longestTail(theOtherNode, reverseGraph, curNode);
+        }
+        return Math.max(maxCycleLength, totalCycleTwoLength);
+    }
+
+    private int longestTail(int cur, List<List<Integer>> reverseGraph, int theOther) {
+        if (cur == theOther) {
+            return 0;
+        }
+        int maxTail = 0;
+        for (int next : reverseGraph.get(cur)) {
+            maxTail = Math.max(maxTail, longestTail(next, reverseGraph, theOther));
+        }
+        return maxTail + 1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
