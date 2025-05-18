@@ -1,0 +1,25 @@
+class Solution {
+    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+        boolean dp[][] = new boolean[numCourses][numCourses];
+        List<Boolean> ans = new ArrayList<>();
+
+        for(int[] pre : prerequisites){
+            dp[pre[0]][pre[1]] = true;
+        }
+
+        for(int i = 0 ; i < numCourses ; i++){
+            for(int src = 0 ; src <  numCourses ; src++){
+                for(int target = 0 ; target <  numCourses ; target++){
+                    dp[src][target] = dp[src][target] || ( dp[i][target] && dp[src][i]);
+                }
+            }
+        }
+
+
+        for(int[] query : queries){
+            ans.add(dp[query[0]][query[1]]);
+        }
+
+        return ans;
+    }
+}
