@@ -1,0 +1,28 @@
+public class Solution {
+    public int longestConsecutive(int[] nums) {
+        if(nums.length == 0)return 0;
+
+        //Declare HashSet
+        HashSet<Integer> set = new HashSet<>();
+
+        //Put non-Duplicate values from array to set 
+        for(int i : nums)set.add(i);
+        int longest = 0;
+
+        for(int i:set){
+            if(!set.contains(i-1)){ //if set doesnot have the previous number, 
+                                      //the number itself becomes the previous number(currentNum) 
+                int currentNum = i;
+                int count= 1;
+
+                while(set.contains(currentNum + 1)){//if set contains the number next to current num,
+                                                    // count ++, currentNum++;
+                    currentNum ++;
+                    count ++;
+                }
+                longest = Math.max(longest,count);
+            }
+        }
+                    return longest;
+    }
+}
